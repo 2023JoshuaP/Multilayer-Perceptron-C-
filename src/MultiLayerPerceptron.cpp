@@ -155,7 +155,7 @@ TrainHistory MultiLayerPerceptron::train(const Matrix &X, const Matrix &y, int e
             Matrix y_batch = y_train.slice(start, end);
 
             auto activations = forward(X_batch);
-            double batch_loss = cross_entropy_loss(activations.back(), y_batch);
+            double batch_loss = mse_loss(activations.back(), y_batch);
             epoch_loss += batch_loss * (end - start);
 
             backward(activations, y_batch);
@@ -168,7 +168,7 @@ TrainHistory MultiLayerPerceptron::train(const Matrix &X, const Matrix &y, int e
         double val_loss = 0.0;
         if (has_val) {
             Matrix val_pred = predict(*X_val);
-            val_loss = cross_entropy_loss(val_pred, *y_val);
+            val_loss = mse_loss(val_pred, *y_val);
             history.val_losses.push_back(val_loss);
 
             // Early stopping with best weight saving
